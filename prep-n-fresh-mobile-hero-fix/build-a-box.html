@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Build Your Box | Prep 'N' Fresh</title>
+<meta name="description" content="Choose your box size, pick your meals, and send your order straight to the kitchen on WhatsApp.">
+<meta name="theme-color" content="#123822">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<header class="site-header">
+  <div class="container">
+    <a class="brand" href="index.html">
+      <span class="brand-mark"><img src="assets/img/logo.jpg" alt="Prep 'N' Fresh logo"></span>
+      <span class="brand-text"><strong>Prep 'N' Fresh</strong><span>Healthy &middot; Fresh &middot; Convenient</span></span>
+    </a>
+    <nav class="main-nav" id="main-nav">
+      <a href="menu.html">Menu</a>
+      <a href="build-a-box.html" aria-current="page">Build a Box</a>
+      <a href="how-it-works.html">How It Works</a>
+      <a href="about.html">About</a>
+      <a class="btn btn-primary" href="https://wa.me/447000000000?text=Hi%20Prep%20%27N%27%20Fresh%2C%20I%27d%20like%20to%20order%20this%20week%27s%20meals.">Order Now</a>
+    </nav>
+    <button class="nav-toggle" aria-label="Menu" aria-expanded="false"><span></span></button>
+  </div>
+</header>
+
+<section class="page-hero tight">
+  <div class="container">
+    <span class="kicker">Build your box</span>
+    <h1 id="bb-heading">Choose your box size</h1>
+    <p class="lead" id="bb-subheading">Pick how many meals you need — you'll choose exactly which dishes on the next step.</p>
+    <p class="bb-trust-line" id="bb-trust-line"></p>
+  </div>
+</section>
+
+<!-- STEP 1: package choice -->
+<section id="bb-step-package">
+  <div class="container">
+    <div class="pricing-grid" id="bb-package-grid"></div>
+    <div class="coming-soon-box">
+      <span class="coming-soon-box__badge">Coming soon</span>
+      <p><strong>Juices &amp; breakfasts</strong> — we're aiming to add these as add-ons within the first couple of months. Want to be first to know? Message us on WhatsApp and we'll let you know the moment they land.</p>
+    </div>
+  </div>
+</section>
+
+<!-- STEP 2: meal selection -->
+<section id="bb-step-meals" hidden>
+  <div class="container bb-layout">
+    <div class="bb-main">
+      <div id="bb-day-toggle" class="bb-day-toggle" hidden></div>
+
+      <div id="bb-single-day-section">
+        <div class="bb-progress-bar">
+          <div class="bb-progress-bar__fill" id="bb-progress-fill"></div>
+        </div>
+        <div class="bb-progress-row">
+          <p class="bb-progress-text" id="bb-progress-text">0 / 0 meals selected</p>
+          <button type="button" class="btn btn-ghost" id="bb-change-package">Change box size</button>
+        </div>
+        <div class="dish-grid" id="bb-meal-grid"></div>
+      </div>
+
+      <div id="bb-split-day-section" hidden>
+        <div class="bb-progress-row">
+          <p class="bb-progress-text" id="bb-progress-text-split">0 / 0 meals selected</p>
+          <button type="button" class="btn btn-ghost" id="bb-change-package-split">Change box size</button>
+        </div>
+
+        <div class="bb-day-block" id="bb-day-block-tuesday">
+          <div class="bb-day-block__header">
+            <h3>Tuesday delivery <span id="bb-tuesday-count">(0 / 0)</span></h3>
+          </div>
+          <div class="bb-progress-bar"><div class="bb-progress-bar__fill" id="bb-progress-fill-tuesday"></div></div>
+          <div class="dish-grid" id="bb-meal-grid-tuesday"></div>
+        </div>
+
+        <div class="bb-day-block" id="bb-day-block-friday">
+          <div class="bb-day-block__header">
+            <h3>Friday delivery <span id="bb-friday-count">(0 / 0)</span></h3>
+          </div>
+          <div class="bb-progress-bar"><div class="bb-progress-bar__fill" id="bb-progress-fill-friday"></div></div>
+          <div class="dish-grid" id="bb-meal-grid-friday"></div>
+        </div>
+      </div>
+    </div>
+    <aside class="bb-sidebar" id="bb-sidebar">
+      <h3>Your order</h3>
+      <div id="bb-jump-nav" class="bb-jump-nav" hidden></div>
+      <div id="bb-sidebar-lines" class="bb-sidebar-lines"></div>
+      <div class="bb-sidebar-total">
+        <span id="bb-sidebar-count">0 / 0 selected</span>
+        <strong id="bb-sidebar-price">&pound;0</strong>
+      </div>
+      <button type="button" class="btn btn-primary" id="bb-continue-btn" disabled style="width:100%; justify-content:center;">Continue &rarr;</button>
+      <button type="button" class="btn btn-ghost" id="bb-reset-btn">Reset &amp; start again</button>
+    </aside>
+  </div>
+</section>
+
+<!-- STEP 3: details + WhatsApp handoff -->
+<section id="bb-step-details" hidden>
+  <div class="container" style="max-width:560px;">
+    <div class="bb-details-card">
+      <h2>Almost done</h2>
+      <p class="lead">A couple of details so the kitchen knows where your box is going, then we'll open WhatsApp with everything filled in.</p>
+
+      <label class="bb-field">
+        <span>Collection or delivery</span>
+        <select id="bb-delivery">
+          <option value="collection">Collection from Westcliff (free)</option>
+          <option value="delivery">Local delivery (from &pound;3.50)</option>
+        </select>
+      </label>
+      <label class="bb-field">
+        <span>Your name</span>
+        <input type="text" id="bb-name" placeholder="e.g. Sam Taylor" autocomplete="name">
+      </label>
+      <label class="bb-field">
+        <span>Postcode</span>
+        <input type="text" id="bb-postcode" placeholder="e.g. SS0 7RR" autocomplete="postal-code">
+      </label>
+
+      <div class="bb-summary-box" id="bb-final-summary"></div>
+
+      <button type="button" class="btn btn-primary" id="bb-pay-btn" style="width:100%; justify-content:center;">Pay by Card &rarr;</button>
+      <p id="bb-pay-error" class="bb-pay-error" hidden></p>
+      <div class="bb-or-divider"><span>or</span></div>
+      <a class="btn btn-outline" id="bb-whatsapp-link" style="width:100%; justify-content:center;" href="#">Send order on WhatsApp instead</a>
+      <button type="button" class="btn btn-ghost" id="bb-back-btn">&larr; Back to meals</button>
+    </div>
+  </div>
+</section>
+
+<footer class="site-footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div>
+        <div class="footer-logo"><img src="assets/img/logo.jpg" alt="Prep 'N' Fresh logo"></div>
+        <h4>Prep 'N' Fresh</h4>
+        <p>Chef-prepped, macro-counted meals cooked fresh in Westcliff-on-Sea.</p>
+      </div>
+      <div>
+        <h4>Explore</h4>
+        <ul>
+          <li><a href="index.html">Home</a></li>
+          <li><a href="menu.html">Menu</a></li>
+          <li><a href="build-a-box.html">Build a Box</a></li>
+          <li><a href="how-it-works.html">How It Works</a></li>
+          <li><a href="about.html">About</a></li>
+          <li><a href="contact.html">Contact</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Visit &amp; collect</h4>
+        <p>9 Palmeira Parade<br>Westcliff-on-Sea<br>Essex SS0 7RR</p>
+      </div>
+      <div>
+        <h4>Order</h4>
+        <p><a href="mailto:hello@prepnfresh.co.uk">hello@prepnfresh.co.uk</a></p>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>&copy; 2026 Prep 'N' Fresh. Made in Westcliff-on-Sea.</span>
+    </div>
+  </div>
+</footer>
+
+<script src="js/data.js"></script>
+<script src="js/order-state.js"></script>
+<script src="js/meal-card.js"></script>
+<script src="js/main.js"></script>
+<script src="js/build-box.js"></script>
+<script src="js/sticky-bar.js"></script>
+</body>
+</html>

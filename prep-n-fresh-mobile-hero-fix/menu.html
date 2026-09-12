@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Menu &amp; Macros | Prep 'N' Fresh</title>
+<meta name="description" content="This week's rotation of chef-prepped, macro-counted meals — with full allergen matrix. High-protein meal prep in Westcliff, Leigh-on-Sea and Southend.">
+<meta name="theme-color" content="#123822">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<div class="countdown-bar" data-countdown>
+  <div class="container">
+    <span class="countdown-label">This week's orders close in</span>
+    <span class="countdown-nums" data-countdown-nums>&mdash;</span>
+    <span class="countdown-sep">&middot;</span>
+    <span class="countdown-label" data-countdown-deadline-label>Order by Monday 6pm for Tuesday delivery</span>
+  </div>
+</div>
+
+<header class="site-header">
+  <div class="container">
+    <a class="brand" href="index.html">
+      <span class="brand-mark"><img src="assets/img/logo.jpg" alt="Prep 'N' Fresh logo"></span>
+      <span class="brand-text"><strong>Prep 'N' Fresh</strong><span>Healthy &middot; Fresh &middot; Convenient</span></span>
+    </a>
+    <nav class="main-nav" id="main-nav">
+      <a href="menu.html" aria-current="page">Menu</a>
+      <a href="build-a-box.html">Build a Box</a>
+      <a href="how-it-works.html">How It Works</a>
+      <a href="about.html">About</a>
+      <a class="btn btn-primary" href="build-a-box.html">Order Now</a>
+    </nav>
+    <button class="nav-toggle" aria-label="Menu" aria-expanded="false"><span></span></button>
+  </div>
+</header>
+
+<section class="page-hero">
+  <div class="container">
+    <span class="kicker">This week's kitchen</span>
+    <h1>Fifteen dishes, rebuilt every week</h1>
+    <p class="lead">Every dish is weighed and calculated from the recipe spec, from 520 to 590 calories, each built around a proper protein portion.</p>
+  </div>
+</section>
+
+<section id="allergens">
+  <div class="container">
+    <span class="kicker">What's your goal?</span>
+    <div class="goal-chips" id="goal-chips">
+      <button type="button" class="goal-chip active" data-goal="all">All meals</button>
+      <button type="button" class="goal-chip" data-goal="high-protein">High protein</button>
+      <button type="button" class="goal-chip" data-goal="lower-calorie">Lower calorie</button>
+      <button type="button" class="goal-chip" data-goal="vegetarian">Vegetarian</button>
+    </div>
+    <div class="dish-grid" id="menu-grid"></div>
+  </div>
+</section>
+
+<section id="matrix" style="background:var(--cream-200); border-top:1px solid var(--line); border-bottom:1px solid var(--line);">
+  <div class="container">
+    <div class="section-head">
+      <span class="kicker">Full allergen matrix</span>
+      <h2>Every dish, every allergen, at a glance</h2>
+      <p>A tick means the allergen is present in that dish as standard. All dishes are cooked in a kitchen that handles all 14 regulated allergens — see the notice below.</p>
+    </div>
+    <div class="matrix-wrap">
+      <table class="matrix">
+        <thead>
+          <tr>
+            <th>Dish</th><th>Wheat (gluten)</th><th>Soya</th><th>Sesame</th><th>Milk</th><th>Fish</th><th>Peanuts</th>
+          </tr>
+        </thead>
+        <tbody id="matrix-body"></tbody>
+      </table>
+    </div>
+    <div class="notice-box" style="margin-top:24px;">
+      <strong>Please note:</strong> all of our food is prepared in a single kitchen that handles every one of the 14 regulated allergens (Celery, Cereals containing gluten, Crustaceans, Eggs, Fish, Lupin, Milk, Molluscs, Mustard, Peanuts, Sesame, Soybeans, Sulphur dioxide &amp; sulphites, Tree nuts). We follow strict separation and cleaning procedures, but we cannot guarantee any dish is completely free from traces of an allergen. If your allergy is severe, please speak to us before ordering.
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="container">
+    <div class="cta-band">
+      <h2>Ready to build your box?</h2>
+      <p>Choose a box size and add exactly the meals you want.</p>
+      <div class="hero-ctas">
+        <a class="btn btn-primary" href="build-a-box.html">Build Your Box</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer class="site-footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div>
+        <div class="footer-logo"><img src="assets/img/logo.jpg" alt="Prep 'N' Fresh logo"></div>
+        <h4>Prep 'N' Fresh</h4>
+        <p>Chef-prepped, macro-counted meals cooked fresh in Westcliff-on-Sea. Healthy, fresh, convenient.</p>
+      </div>
+      <div>
+        <h4>Explore</h4>
+        <ul>
+          <li><a href="index.html">Home</a></li>
+          <li><a href="menu.html">Menu</a></li>
+          <li><a href="build-a-box.html">Build a Box</a></li>
+          <li><a href="how-it-works.html">How It Works</a></li>
+          <li><a href="about.html">About</a></li>
+          <li><a href="contact.html">Contact</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Visit &amp; collect</h4>
+        <p>9 Palmeira Parade<br>Western Esplanade<br>Westcliff-on-Sea<br>Essex SS0 7RR</p>
+        <p>Collection Tuesday 4&ndash;8pm<br>Collection Friday 4&ndash;8pm</p>
+      </div>
+      <div>
+        <h4>Order</h4>
+        <p>Build your box online, or order through WhatsApp. Order by Monday 6pm for Tuesday, or Thursday 6pm for Friday.</p>
+        <ul>
+          <li><a href="build-a-box.html">Build a Box</a></li>
+          <li><a href="mailto:hello@prepnfresh.co.uk">hello@prepnfresh.co.uk</a></li>
+          <li><a href="tel:+447000000000">07000 000000</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>&copy; 2026 Prep 'N' Fresh. Made in Westcliff-on-Sea.</span>
+      <nav>
+        <a href="menu.html#allergens">Allergen information</a>
+        <a href="how-it-works.html#storage">Storage &amp; reheating</a>
+        <a href="contact.html#faq">FAQs</a>
+      </nav>
+    </div>
+  </div>
+</footer>
+
+<script src="js/data.js"></script>
+<script src="js/order-state.js"></script>
+<script src="js/meal-card.js"></script>
+<script src="js/main.js"></script>
+<script src="js/countdown.js"></script>
+<script src="js/menu-render.js"></script>
+<script src="js/sticky-bar.js"></script>
+</body>
+</html>

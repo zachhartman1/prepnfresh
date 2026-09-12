@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Order Confirmed | Prep 'N' Fresh</title>
+<meta name="robots" content="noindex">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<header class="site-header">
+  <div class="container">
+    <a class="brand" href="index.html">
+      <span class="brand-mark"><img src="assets/img/logo.jpg" alt="Prep 'N' Fresh logo"></span>
+      <span class="brand-text"><strong>Prep 'N' Fresh</strong><span>Healthy &middot; Fresh &middot; Convenient</span></span>
+    </a>
+    <nav class="main-nav" id="main-nav">
+      <a href="menu.html">Menu</a>
+      <a href="build-a-box.html">Build a Box</a>
+      <a href="how-it-works.html">How It Works</a>
+      <a href="about.html">About</a>
+      <a class="btn btn-primary" href="build-a-box.html">Order Now</a>
+    </nav>
+    <button class="nav-toggle" aria-label="Menu" aria-expanded="false"><span></span></button>
+  </div>
+</header>
+
+<section class="page-hero tight">
+  <div class="container" style="max-width: 640px; text-align: center;">
+    <span class="kicker">Order confirmed</span>
+    <h1>Thank you &mdash; your payment went through</h1>
+    <p class="lead" id="success-message">We've got your order and we're getting it ready. You'll hear from us on WhatsApp or email to confirm your delivery details.</p>
+    <p style="margin-top: 28px;">
+      <a class="btn btn-primary" href="index.html">Back to homepage</a>
+      <a class="btn btn-outline" href="menu.html" style="margin-left: 10px;">Browse the menu</a>
+    </p>
+  </div>
+</section>
+
+<footer class="site-footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div>
+        <div class="footer-logo"><img src="assets/img/logo.jpg" alt="Prep 'N' Fresh logo"></div>
+        <h4>Prep 'N' Fresh</h4>
+        <p>Chef-prepped, macro-counted meals cooked fresh in Westcliff-on-Sea. Healthy, fresh, convenient.</p>
+      </div>
+      <div>
+        <h4>Explore</h4>
+        <ul>
+          <li><a href="index.html">Home</a></li>
+          <li><a href="menu.html">Menu</a></li>
+          <li><a href="build-a-box.html">Build a Box</a></li>
+          <li><a href="how-it-works.html">How It Works</a></li>
+          <li><a href="about.html">About</a></li>
+          <li><a href="contact.html">Contact</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Visit &amp; collect</h4>
+        <p>9 Palmeira Parade<br>Western Esplanade<br>Westcliff-on-Sea<br>Essex SS0 7RR</p>
+        <p>Collection Tuesday 4&ndash;8pm<br>Collection Friday 4&ndash;8pm</p>
+      </div>
+      <div>
+        <h4>Order</h4>
+        <p>Build your box online, or order through WhatsApp. Order by Monday 6pm for Tuesday, or Thursday 6pm for Friday.</p>
+        <ul>
+          <li><a href="build-a-box.html">Build a Box</a></li>
+          <li><a href="mailto:hello@prepnfresh.co.uk">hello@prepnfresh.co.uk</a></li>
+          <li><a href="tel:+447000000000">07000 000000</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>&copy; 2026 Prep 'N' Fresh. Made in Westcliff-on-Sea.</span>
+      <nav>
+        <a href="menu.html#allergens">Allergen information</a>
+        <a href="how-it-works.html#storage">Storage &amp; reheating</a>
+        <a href="contact.html#faq">FAQs</a>
+      </nav>
+    </div>
+  </div>
+</footer>
+
+<script src="js/main.js"></script>
+<script>
+  // Clear the in-progress order now that payment has succeeded, so the
+  // customer doesn't land back on a stale half-finished box next time.
+  try { localStorage.removeItem("pnf_order_v2"); } catch (e) {}
+</script>
+</body>
+</html>
