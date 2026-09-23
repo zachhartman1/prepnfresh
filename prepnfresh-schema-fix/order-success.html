@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Order Confirmed | Prep 'N' Fresh</title>
+<meta name="robots" content="noindex">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<header class="site-header">
+  <div class="container">
+    <a class="brand" href="index.html">
+      <span class="brand-mark"><img src="assets/img/logo.jpg" alt="Prep 'N' Fresh logo"></span>
+      <span class="brand-text"><strong>Prep 'N' Fresh</strong><span>Healthy &middot; Fresh &middot; Convenient</span></span>
+    </a>
+    <nav class="main-nav" id="main-nav">
+      <a href="menu.html">Menu</a>
+      <a href="build-a-box.html">Build a Box</a>
+      <a href="how-it-works.html">How It Works</a>
+      <a href="about.html">About</a>
+    </nav>
+    <button class="nav-toggle" aria-label="Menu" aria-expanded="false"><span></span></button>
+  </div>
+</header>
+
+<section class="page-hero tight">
+  <div class="container" style="max-width: 640px; text-align: center;">
+    <div id="os-checking">
+      <span class="kicker">One moment</span>
+      <h1>Confirming your payment&hellip;</h1>
+      <p class="lead">This only takes a second.</p>
+    </div>
+
+    <div id="os-paid" hidden>
+      <span class="kicker">Order confirmed</span>
+      <h1>Thank you &mdash; your payment went through</h1>
+      <p class="lead">Your order has been sent straight to our kitchen &mdash; no further action needed. We'll have it ready for your chosen delivery day.</p>
+      <p style="margin-top: 24px;">
+        <a class="btn btn-outline" id="os-whatsapp-btn" href="#" target="_blank" rel="noopener" style="width:100%; justify-content:center;">Message us on WhatsApp with any questions</a>
+      </p>
+      <p style="margin-top: 28px;">
+        <a class="btn btn-outline" href="index.html">Back to homepage</a>
+      </p>
+    </div>
+
+    <div id="os-failed" hidden>
+      <span class="kicker">Payment not confirmed</span>
+      <h1>We couldn't confirm this payment</h1>
+      <p class="lead">This can happen if the payment was cancelled, declined, or if this page was opened without completing checkout. Nothing has been charged if this happened in error. Please try again, or message us on WhatsApp if you're not sure what happened.</p>
+      <p style="margin-top: 24px;">
+        <a class="btn btn-primary" href="build-a-box.html" style="width:100%; justify-content:center;">Back to Build a Box</a>
+      </p>
+    </div>
+  </div>
+</section>
+
+<footer class="site-footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div>
+        <div class="footer-logo"><img src="assets/img/logo.jpg" alt="Prep 'N' Fresh logo"></div>
+        <h4>Prep 'N' Fresh</h4>
+        <p>Chef-prepped, macro-counted meals cooked fresh in Westcliff-on-Sea. Healthy, fresh, convenient.</p>
+      </div>
+      <div>
+        <h4>Explore</h4>
+        <ul>
+          <li><a href="index.html">Home</a></li>
+          <li><a href="menu.html">Menu</a></li>
+          <li><a href="build-a-box.html">Build a Box</a></li>
+          <li><a href="how-it-works.html">How It Works</a></li>
+          <li><a href="about.html">About</a></li>
+          <li><a href="contact.html">Contact</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Visit &amp; collect</h4>
+        <p>9 Palmeira Parade<br>Western Esplanade<br>Westcliff-on-Sea<br>Essex SS0 7RR</p>
+        <p>Collection Tuesday 4&ndash;8pm<br>Collection Friday 4&ndash;8pm</p>
+      </div>
+      <div>
+        <h4>Order</h4>
+        <p>Build your box online, or order through WhatsApp. Order by Monday 6pm for Tuesday, or Thursday 6pm for Friday.</p>
+        <ul>
+          <li><a href="build-a-box.html">Build a Box</a></li>
+          <li><a href="mailto:prepnfreshuk@gmail.com">prepnfreshuk@gmail.com</a></li>
+          <li><a href="tel:+447930691588">07930 691588</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>&copy; 2026 Prep 'N' Fresh. Made in Westcliff-on-Sea.</span>
+      <nav>
+        <a href="menu.html#allergens">Allergen information</a>
+        <a href="how-it-works.html#storage">Storage &amp; reheating</a>
+        <a href="contact.html#faq">FAQs</a>
+        <a href="privacy-policy.html">Privacy Policy</a>
+      </nav>
+    </div>
+  </div>
+</footer>
+
+<script src="js/data.js"></script>
+<script src="js/order-state.js"></script>
+<script src="js/main.js"></script>
+<script>
+(function () {
+  var params = new URLSearchParams(window.location.search);
+  var ref = params.get("ref");
+
+  var checkingEl = document.getElementById("os-checking");
+  var paidEl = document.getElementById("os-paid");
+  var failedEl = document.getElementById("os-failed");
+
+  var order = null;
+  try { order = JSON.parse(sessionStorage.getItem("pnf_pending_order") || "null"); } catch (e) {}
+
+  function showFailed() {
+    checkingEl.hidden = true;
+    failedEl.hidden = false;
+  }
+
+  function showPaid() {
+    checkingEl.hidden = true;
+    paidEl.hidden = false;
+
+    // Just a plain contact link now — the kitchen is notified automatically
+    // by email, so this button is for general questions, not confirming
+    // the order itself.
+    document.getElementById("os-whatsapp-btn").href = "https://wa.me/" + window.PNF.business.whatsapp;
+
+    // The order is genuinely confirmed now — clear both the in-progress
+    // draft and the handoff data so nothing stale lingers or could be
+    // resubmitted.
+    try { window.PNF_ORDER.clear(); } catch (e) {}
+    try { sessionStorage.removeItem("pnf_pending_order"); } catch (e) {}
+    try { sessionStorage.removeItem("pnf_pending_ref"); } catch (e) {}
+  }
+
+  if (!ref) {
+    showFailed();
+    return;
+  }
+
+  var orderSummary = "";
+  try {
+    if (order && window.PNF_ORDER.whatsappMessage) orderSummary = window.PNF_ORDER.whatsappMessage(order);
+  } catch (e) {}
+
+  fetch("/api/verify-payment", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ ref: ref, orderSummary: orderSummary })
+  })
+    .then(function (r) { return r.json(); })
+    .then(function (data) {
+      if (data.status === "paid") showPaid();
+      else showFailed();
+    })
+    .catch(function () { showFailed(); });
+})();
+</script>
+</body>
+</html>
