@@ -107,7 +107,7 @@
   <div class="container" style="max-width:560px;">
     <div class="bb-details-card">
       <h2>Almost done</h2>
-      <p class="lead">A couple of details so the kitchen knows who your box is for and where it's going, then you'll be taken straight to our secure payment page.</p>
+      <p class="lead">A few details so the kitchen knows who your box is for, how to reach you and where it's going, then you'll be taken straight to our secure payment page.</p>
 
       <label class="bb-field">
         <span>Collection or delivery</span>
@@ -119,6 +119,18 @@
       <label class="bb-field">
         <span>Your name</span>
         <input type="text" id="bb-name" placeholder="e.g. Sam Taylor" autocomplete="name">
+      </label>
+      <label class="bb-field">
+        <span>Mobile number</span>
+        <input type="tel" id="bb-phone" placeholder="e.g. 07700 900123" autocomplete="tel" inputmode="tel">
+      </label>
+      <label class="bb-field">
+        <span>Email <small class="bb-field-optional">(optional)</small></span>
+        <input type="email" id="bb-email" placeholder="e.g. sam@example.com" autocomplete="email" inputmode="email">
+      </label>
+      <label class="bb-field" id="bb-address-field" hidden>
+        <span>House number &amp; street</span>
+        <input type="text" id="bb-address" placeholder="e.g. 12 London Road" autocomplete="address-line1">
       </label>
       <label class="bb-field">
         <span>Postcode</span>

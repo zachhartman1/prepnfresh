@@ -174,6 +174,9 @@
     lines.push("Collection / Delivery: " + (order.delivery === "delivery" ? "Local delivery" : "Collection from Westcliff"));
     lines.push("");
     lines.push("Name: " + (order.name || ""));
+    lines.push("Phone: " + (order.phone || ""));
+    if (order.email) lines.push("Email: " + order.email);
+    if (order.delivery === "delivery" && order.address) lines.push("Address: " + order.address);
     lines.push("Postcode: " + (order.postcode || ""));
     return lines.join("\n");
   }

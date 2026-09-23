@@ -320,15 +320,26 @@
     var deliverySel = document.getElementById("bb-delivery");
     var nameInput = document.getElementById("bb-name");
     var postcodeInput = document.getElementById("bb-postcode");
+    var phoneInput = document.getElementById("bb-phone");
+    var emailInput = document.getElementById("bb-email");
+    var addressInput = document.getElementById("bb-address");
+    var addressField = document.getElementById("bb-address-field");
 
     deliverySel.value = order.delivery || "collection";
     nameInput.value = order.name || "";
     postcodeInput.value = order.postcode || "";
+    phoneInput.value = order.phone || "";
+    emailInput.value = order.email || "";
+    addressInput.value = order.address || "";
 
     function syncAndRender() {
       order.delivery = deliverySel.value;
       order.name = nameInput.value;
       order.postcode = postcodeInput.value;
+      order.phone = phoneInput.value;
+      order.email = emailInput.value;
+      order.address = addressInput.value;
+      addressField.hidden = order.delivery !== "delivery";
       window.PNF_ORDER.save(order);
 
       var count = window.PNF_ORDER.totalSelected(order);
@@ -346,14 +357,19 @@
         '<div class="bb-sidebar-total"><span>' + count + ' meals</span><strong>' + window.PNF.money(window.PNF_ORDER.orderPrice(order)) + '</strong></div>';
     }
 
-    deliverySel.addEventListener("change", syncAndRender);
-    nameInput.addEventListener("input", syncAndRender);
-    postcodeInput.addEventListener("input", syncAndRender);
+    // Assigned (not addEventListener) so going Back and Continue again
+    // replaces the handlers instead of stacking duplicates.
+    deliverySel.onchange = syncAndRender;
+    nameInput.oninput = syncAndRender;
+    postcodeInput.oninput = syncAndRender;
+    phoneInput.oninput = syncAndRender;
+    emailInput.oninput = syncAndRender;
+    addressInput.oninput = syncAndRender;
     syncAndRender();
 
     var payBtn = document.getElementById("bb-pay-btn");
     var payError = document.getElementById("bb-pay-error");
-    payBtn.addEventListener("click", function () {
+    payBtn.onclick = function () {
       payError.hidden = true;
 
       if (!window.PNF_ORDER.isComplete(order)) {
@@ -361,8 +377,16 @@
         payError.hidden = false;
         return;
       }
-      if (!order.name || !order.postcode) {
-        payError.textContent = "Please fill in your name and postcode before paying.";
+      var trimmed = function (v) { return (v || "").trim(); };
+      var phoneDigits = trimmed(order.phone).replace(/[^\d]/g, "");
+      var problem = "";
+      if (!trimmed(order.name)) problem = "Please enter your name.";
+      else if (phoneDigits.length < 10 || phoneDigits.length > 13) problem = "Please enter a valid mobile number so we can contact you about your order.";
+      else if (trimmed(order.email) && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(trimmed(order.email))) problem = "That email address doesn't look quite right \u2014 please check it, or leave it blank.";
+      else if (order.delivery === "delivery" && !trimmed(order.address)) problem = "Please enter your house number and street for delivery.";
+      else if (!trimmed(order.postcode)) problem = "Please enter your postcode.";
+      if (problem) {
+        payError.textContent = problem;
         payError.hidden = false;
         return;
       }
@@ -378,6 +402,7 @@
           mealCount: window.PNF_ORDER.totalSelected(order),
           orderSummary: window.PNF_ORDER.whatsappMessage(order),
           name: order.name,
+          phone: order.phone,
           postcode: order.postcode,
           deliveryMethod: order.delivery
         })
@@ -399,7 +424,7 @@
           payBtn.disabled = false;
           payBtn.textContent = "Pay Now \u2192";
         });
-    });
+    };
   }
 
   document.getElementById("bb-back-btn").addEventListener("click", function () {
