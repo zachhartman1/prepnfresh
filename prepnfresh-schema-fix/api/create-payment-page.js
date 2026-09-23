@@ -112,16 +112,7 @@ module.exports = async (req, res) => {
       hostedProperties: {
         sendURLParameters: "true"
       },
-      settlement: {
-        auto: true,
-        // Worldpay auto-voids any authorized payment whose CVC doesn't
-        // match a recognized value by default. In test mode there's no CVC
-        // magic value to "match" against, so every transaction was
-        // authorizing successfully and then immediately being cancelled.
-        // Disabling this lets settlement proceed normally; standard
-        // CVC/fraud checks still apply via the card networks in live mode.
-        cancelOn: { cvcNotMatched: "disabled" }
-      }
+      settlement: { auto: true }
     };
 
     const wpRes = await fetch(`${BASE_URL}/payment_pages`, {
