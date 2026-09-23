@@ -41,15 +41,40 @@
     if (order && window.PNF_ORDER.whatsappMessage) orderSummary = window.PNF_ORDER.whatsappMessage(order);
   } catch (e) {}
 
-  fetch("/api/verify-payment", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ ref: ref, orderSummary: orderSummary })
-  })
-    .then(function (r) { return r.json(); })
-    .then(function (data) {
-      if (data.status === "paid") showPaid();
-      else showFailed();
+  // Worldpay records a transaction's final status asynchronously — checking
+  // the instant the customer lands back here can catch it before the
+  // status has propagated, even though the payment itself already
+  // succeeded. Retry a few times before concluding it genuinely failed,
+  // rather than giving up after a single too-early check.
+  var MAX_ATTEMPTS = 6;
+  var RETRY_DELAY_MS = 1500;
+  var attempt = 0;
+
+  function checkStatus() {
+    attempt++;
+    fetch("/api/verify-payment", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ ref: ref, orderSummary: orderSummary })
     })
-    .catch(function () { showFailed(); });
+      .then(function (r) { return r.json(); })
+      .then(function (data) {
+        if (data.status === "paid") {
+          showPaid();
+        } else if (data.status === "failed") {
+          // A definitive refusal/cancellation — retrying won't change this.
+          showFailed();
+        } else if (attempt < MAX_ATTEMPTS) {
+          setTimeout(checkStatus, RETRY_DELAY_MS);
+        } else {
+          showFailed();
+        }
+      })
+      .catch(function () {
+        if (attempt < MAX_ATTEMPTS) setTimeout(checkStatus, RETRY_DELAY_MS);
+        else showFailed();
+      });
+  }
+
+  checkStatus();
 })();
