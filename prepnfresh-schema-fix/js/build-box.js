@@ -17,6 +17,8 @@
     stepMeals.hidden = name !== "meals";
     stepDetails.hidden = name !== "details";
     window.scrollTo({ top: 0, behavior: "smooth" });
+    // Let the sticky mobile bar know which step is showing
+    document.dispatchEvent(new CustomEvent("pnf:step-changed", { detail: name }));
     if (name === "package") {
       heading.textContent = "Choose your box size";
       subheading.textContent = "Pick how many meals you need — you'll choose exactly which dishes on the next step.";

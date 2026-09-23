@@ -16,14 +16,49 @@
     document.body.appendChild(bar);
     render(bar);
     document.addEventListener("pnf:order-changed", function () { render(bar); });
+    document.addEventListener("pnf:step-changed", function () { render(bar); });
     window.addEventListener("storage", function (e) {
       if (e.key === "pnf_order_v1") render(bar);
     });
+
+    // On the build page the sticky Continue must do exactly what the in-page
+    // Continue button does (move to the details / "Almost done" step), rather
+    // than linking back to build-a-box.html, which just reloads the page.
+    bar.addEventListener("click", function (e) {
+      var cta = e.target.closest ? e.target.closest(".js-sticky-continue") : null;
+      if (!cta) return;
+      e.preventDefault();
+      var realBtn = document.getElementById("bb-continue-btn");
+      if (realBtn && !realBtn.disabled) realBtn.click();
+    });
+  }
+
+  // Which build-page step is currently visible (null if not on the build page)
+  function currentBuildStep() {
+    var meals = document.getElementById("bb-step-meals");
+    if (!meals) return null;
+    if (!meals.hidden) return "meals";
+    var details = document.getElementById("bb-step-details");
+    if (details && !details.hidden) return "details";
+    return "package";
+  }
+
+  function hide(bar) {
+    bar.innerHTML = "";
+    bar.classList.add("sticky-order-bar--hidden");
   }
 
   function render(bar) {
     var order = window.PNF_ORDER.load();
-    var onBuildPage = /build-a-box\.html/.test(window.location.pathname);
+    var buildStep = currentBuildStep();
+    var onBuildPage = buildStep !== null;
+
+    // Build page: only show the bar while choosing meals. The package step
+    // has its own buttons, and the details step has its own Pay Now button.
+    if (onBuildPage && buildStep !== "meals") {
+      hide(bar);
+      return;
+    }
 
     if (order && window.PNF.getPackage(order.packageId)) {
       var pkg = window.PNF.getPackage(order.packageId);
@@ -36,11 +71,13 @@
             '<strong>' + count + ' / ' + target + '</strong> selected' +
             '<span class="sticky-order-bar__price">' + window.PNF.money(price) + '</span>' +
           '</div>' +
-          '<a class="btn btn-primary sticky-order-bar__cta" href="build-a-box.html">Continue &rarr;</a>' +
+          (onBuildPage
+            ? '<button type="button" class="btn btn-primary sticky-order-bar__cta js-sticky-continue"' +
+                (window.PNF_ORDER.isComplete(order) ? '' : ' disabled') + '>Continue &rarr;</button>'
+            : '<a class="btn btn-primary sticky-order-bar__cta" href="build-a-box.html">Continue &rarr;</a>') +
         '</div>';
     } else if (onBuildPage) {
-      bar.innerHTML = "";
-      bar.classList.add("sticky-order-bar--hidden");
+      hide(bar);
       return;
     } else {
       bar.innerHTML =
