@@ -16,7 +16,7 @@ const ORDER_NOTIFICATION_EMAIL = "prepnfreshuk@gmail.com";
 // lastEvent values that count as a genuinely completed payment. Worldpay's
 // docs use slightly different casings/wordings across API versions, so we
 // match loosely (case-insensitive substring) rather than one exact string.
-const SUCCESS_PATTERNS = ["authorized", "sentforsettlement", "settled"];
+const SUCCESS_PATTERNS = ["authorized", "sentforsettlement", "settlementrequestsubmitted", "settled"];
 const FAILURE_PATTERNS = ["refused", "cancel", "failed", "timedout"];
 
 function classify(lastEvent) {
