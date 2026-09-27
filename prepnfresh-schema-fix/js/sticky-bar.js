@@ -15,10 +15,35 @@
     bar.setAttribute("aria-label", "Order status");
     document.body.appendChild(bar);
     render(bar);
+    pinToVisibleViewport(bar);
     document.addEventListener("pnf:order-changed", function () { render(bar); });
     window.addEventListener("storage", function (e) {
       if (e.key === "pnf_order_v1") render(bar);
     });
+  }
+
+  // Mobile browsers (iOS Safari in particular) report `position: fixed;
+  // bottom: 0` relative to the full layout viewport, which extends
+  // underneath the browser's own address/toolbar — not the shorter
+  // "visual viewport" the person can actually see and tap. That leaves
+  // the bar rendered right above the on-screen edge but with its real
+  // hit-box partly behind the browser chrome, so taps land on the
+  // browser's own UI instead of our button and silently do nothing.
+  // Desktop has no such overlapping chrome, so the same code works fine
+  // there. The Visual Viewport API reports the true visible area, so we
+  // nudge the bar up by whatever gap has opened up between the two.
+  function pinToVisibleViewport(bar) {
+    if (!window.visualViewport) return;
+    var vv = window.visualViewport;
+
+    function reposition() {
+      var gap = window.innerHeight - vv.height - vv.offsetTop;
+      bar.style.transform = gap > 0 ? "translateY(-" + gap + "px)" : "";
+    }
+
+    vv.addEventListener("resize", reposition);
+    vv.addEventListener("scroll", reposition);
+    reposition();
   }
 
   function render(bar) {
