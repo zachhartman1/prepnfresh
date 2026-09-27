@@ -46,6 +46,26 @@
     reposition();
   }
 
+  // The build-a-box wizard keeps track of which step (meals vs. details)
+  // is showing entirely in page JS, not in the URL. So a sticky-bar CTA
+  // that's just a link to "build-a-box.html" — the same page it's
+  // already on — does a full reload, and boot() always lands a reload
+  // back on the meals step regardless of which step you were actually
+  // on. From the meals step that reload is invisible (you're still
+  // looking at the same step), which is exactly why the button looked
+  // "broken" on mobile: it was doing something, just not the right
+  // thing, and only scrolling down to the real in-page button actually
+  // advanced the wizard. Instead of navigating, forward the tap to
+  // whichever real step button is currently visible on the page, the
+  // same as if the person had scrolled down and pressed it themselves.
+  function clickCurrentStepButton() {
+    var payBtn = document.getElementById("bb-pay-btn");
+    var continueBtn = document.getElementById("bb-continue-btn");
+    var target = payBtn && !payBtn.closest("[hidden]") ? payBtn
+      : (continueBtn && !continueBtn.closest("[hidden]") ? continueBtn : null);
+    if (target) target.click();
+  }
+
   function render(bar) {
     var order = window.PNF_ORDER.load();
     var onBuildPage = /build-a-box\.html/.test(window.location.pathname);
@@ -55,14 +75,24 @@
       var count = window.PNF_ORDER.totalSelected(order);
       var target = pkg.variable ? pkg.maxMeals : pkg.meals;
       var price = window.PNF_ORDER.orderPrice(order);
+      var payBtnVisible = onBuildPage && document.getElementById("bb-pay-btn") &&
+        !document.getElementById("bb-pay-btn").closest("[hidden]");
+      var ctaLabel = payBtnVisible ? "Pay Now &rarr;" : "Continue &rarr;";
+      var cta = onBuildPage
+        ? '<button type="button" class="btn btn-primary sticky-order-bar__cta" id="sticky-order-bar-cta">' + ctaLabel + '</button>'
+        : '<a class="btn btn-primary sticky-order-bar__cta" href="build-a-box.html">Continue &rarr;</a>';
       bar.innerHTML =
         '<div class="sticky-order-bar__inner">' +
           '<div class="sticky-order-bar__status">' +
             '<strong>' + count + ' / ' + target + '</strong> selected' +
             '<span class="sticky-order-bar__price">' + window.PNF.money(price) + '</span>' +
           '</div>' +
-          '<a class="btn btn-primary sticky-order-bar__cta" href="build-a-box.html">Continue &rarr;</a>' +
+          cta +
         '</div>';
+      if (onBuildPage) {
+        var ctaBtn = document.getElementById("sticky-order-bar-cta");
+        if (ctaBtn) ctaBtn.addEventListener("click", clickCurrentStepButton);
+      }
     } else if (onBuildPage) {
       bar.innerHTML = "";
       bar.classList.add("sticky-order-bar--hidden");
