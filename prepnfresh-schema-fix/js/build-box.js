@@ -317,17 +317,29 @@
     var pkg = window.PNF.getPackage(order.packageId);
     var deliverySel = document.getElementById("bb-delivery");
     var nameInput = document.getElementById("bb-name");
+    var addressWrap = document.getElementById("bb-address-wrap");
+    var addressInput = document.getElementById("bb-address");
     var postcodeInput = document.getElementById("bb-postcode");
+    var phoneInput = document.getElementById("bb-phone");
 
     deliverySel.value = order.delivery || "collection";
     nameInput.value = order.name || "";
+    addressInput.value = order.address || "";
     postcodeInput.value = order.postcode || "";
+    phoneInput.value = order.phone || "";
 
     function syncAndRender() {
       order.delivery = deliverySel.value;
       order.name = nameInput.value;
+      order.address = addressInput.value;
       order.postcode = postcodeInput.value;
+      order.phone = phoneInput.value;
       window.PNF_ORDER.save(order);
+
+      // The house number/street only matters when something is actually
+      // being delivered — collection customers pick their box up from
+      // Westcliff, so there's nothing to address it to.
+      addressWrap.hidden = order.delivery !== "delivery";
 
       var count = window.PNF_ORDER.totalSelected(order);
       var summary = document.getElementById("bb-final-summary");
@@ -346,7 +358,9 @@
 
     deliverySel.addEventListener("change", syncAndRender);
     nameInput.addEventListener("input", syncAndRender);
+    addressInput.addEventListener("input", syncAndRender);
     postcodeInput.addEventListener("input", syncAndRender);
+    phoneInput.addEventListener("input", syncAndRender);
     syncAndRender();
 
     var payBtn = document.getElementById("bb-pay-btn");
@@ -359,8 +373,13 @@
         payError.hidden = false;
         return;
       }
-      if (!order.name || !order.postcode) {
-        payError.textContent = "Please fill in your name and postcode before paying.";
+      if (!order.name || !order.postcode || !order.phone) {
+        payError.textContent = "Please fill in your name, postcode and phone number before paying.";
+        payError.hidden = false;
+        return;
+      }
+      if (order.delivery === "delivery" && !order.address) {
+        payError.textContent = "Please add your house number/name and street for delivery.";
         payError.hidden = false;
         return;
       }
@@ -376,7 +395,9 @@
           mealCount: window.PNF_ORDER.totalSelected(order),
           orderSummary: window.PNF_ORDER.whatsappMessage(order),
           name: order.name,
+          address: order.address,
           postcode: order.postcode,
+          phone: order.phone,
           deliveryMethod: order.delivery
         })
       })

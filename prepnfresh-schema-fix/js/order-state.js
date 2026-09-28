@@ -10,7 +10,7 @@
      items: { tuesday: { mealId: qty }, friday: { mealId: qty } },
      deliveryDay: 'tuesday'|'friday',   // only meaningful for schedule:'single' (Taster) packages
      delivery: 'collection'|'delivery',
-     name, postcode, createdAt
+     name, address, postcode, phone, createdAt
    }
 
    For schedule:'single' packages (Taster), all items live under whichever
@@ -51,7 +51,9 @@
       deliveryDay: "tuesday",
       delivery: "collection",
       name: "",
+      address: "",
       postcode: "",
+      phone: "",
       createdAt: Date.now()
     };
   }
@@ -174,7 +176,11 @@
     lines.push("Collection / Delivery: " + (order.delivery === "delivery" ? "Local delivery" : "Collection from Westcliff"));
     lines.push("");
     lines.push("Name: " + (order.name || ""));
+    if (order.delivery === "delivery") {
+      lines.push("Address: " + (order.address || ""));
+    }
     lines.push("Postcode: " + (order.postcode || ""));
+    lines.push("Phone: " + (order.phone || ""));
     return lines.join("\n");
   }
 

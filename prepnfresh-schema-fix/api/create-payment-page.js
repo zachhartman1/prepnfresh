@@ -53,15 +53,19 @@ module.exports = async (req, res) => {
       return;
     }
 
-    const { packageId, mealCount, orderSummary, name, postcode, deliveryMethod } = req.body || {};
+    const { packageId, mealCount, orderSummary, name, address, postcode, phone, deliveryMethod } = req.body || {};
 
     const pkg = PACKAGES[packageId];
     if (!pkg) {
       res.status(400).json({ error: "Unknown package selected." });
       return;
     }
-    if (!name || !postcode) {
-      res.status(400).json({ error: "Name and postcode are required." });
+    if (!name || !postcode || !phone) {
+      res.status(400).json({ error: "Name, postcode and phone number are required." });
+      return;
+    }
+    if (deliveryMethod === "delivery" && !address) {
+      res.status(400).json({ error: "Address is required for delivery." });
       return;
     }
 
@@ -100,7 +104,7 @@ module.exports = async (req, res) => {
         amount: Math.round(price * 100) // minor units (pence)
       },
       description: truncate(
-        name + " (" + postcode + ") - " + packageLabel + " - " + (deliveryMethod === "delivery" ? "Delivery" : "Collection"),
+        name + " (" + (deliveryMethod === "delivery" ? address + ", " : "") + postcode + ") - " + phone + " - " + packageLabel + " - " + (deliveryMethod === "delivery" ? "Delivery" : "Collection"),
         128
       ),
       resultURLs: {

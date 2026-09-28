@@ -120,9 +120,19 @@
         <span>Your name</span>
         <input type="text" id="bb-name" placeholder="e.g. Sam Taylor" autocomplete="name">
       </label>
+      <div id="bb-address-wrap" hidden>
+        <label class="bb-field">
+          <span>House number/name and street</span>
+          <input type="text" id="bb-address" placeholder="e.g. 12 Palmeira Parade" autocomplete="address-line1">
+        </label>
+      </div>
       <label class="bb-field">
         <span>Postcode</span>
         <input type="text" id="bb-postcode" placeholder="e.g. SS0 7RR" autocomplete="postal-code">
+      </label>
+      <label class="bb-field">
+        <span>Phone number</span>
+        <input type="tel" id="bb-phone" placeholder="e.g. 07930 691588" autocomplete="tel">
       </label>
 
       <div class="bb-summary-box" id="bb-final-summary"></div>
