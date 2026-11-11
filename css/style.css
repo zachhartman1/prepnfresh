@@ -1098,6 +1098,8 @@ table.matrix th:first-child { background: var(--cream-200); }
   padding: 30px;
 }
 .bb-field { display: block; margin-bottom: 16px; }
+.bb-field[hidden] { display: none; }
+.bb-field-optional { font-weight: 400; color: var(--ink-muted); }
 .bb-field span { display: block; font-size: 0.85rem; font-weight: 600; margin-bottom: 6px; color: var(--ink); }
 .bb-field input, .bb-field select {
   width: 100%;
@@ -1242,14 +1244,13 @@ table.matrix th:first-child { background: var(--cream-200); }
   z-index: 60;
   box-shadow: 0 -4px 16px rgba(18, 56, 34, 0.08);
   display: none;
-  will-change: transform;
 }
 .sticky-order-bar--hidden { display: none !important; }
 .sticky-order-bar__inner { display: flex; align-items: center; justify-content: space-between; gap: 12px; max-width: var(--container); margin: 0 auto; }
 .sticky-order-bar__status { font-size: 0.88rem; color: var(--ink-muted); }
 .sticky-order-bar__status strong { color: var(--forest-900); font-size: 1rem; }
 .sticky-order-bar__price { display: block; font-size: 0.8rem; }
-.sticky-order-bar__cta { flex-shrink: 0; }
+.sticky-order-bar__cta { flex-shrink: 0; touch-action: manipulation; cursor: pointer; }
 
 @media (max-width: 640px) {
   .sticky-order-bar { display: block; }

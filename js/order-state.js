@@ -10,7 +10,7 @@
      items: { tuesday: { mealId: qty }, friday: { mealId: qty } },
      deliveryDay: 'tuesday'|'friday',   // only meaningful for schedule:'single' (Taster) packages
      delivery: 'collection'|'delivery',
-     name, address, postcode, phone, email, createdAt
+     name, postcode, createdAt
    }
 
    For schedule:'single' packages (Taster), all items live under whichever
@@ -51,10 +51,7 @@
       deliveryDay: "tuesday",
       delivery: "collection",
       name: "",
-      address: "",
       postcode: "",
-      phone: "",
-      email: "",
       createdAt: Date.now()
     };
   }
@@ -177,37 +174,11 @@
     lines.push("Collection / Delivery: " + (order.delivery === "delivery" ? "Local delivery" : "Collection from Westcliff"));
     lines.push("");
     lines.push("Name: " + (order.name || ""));
-    if (order.delivery === "delivery") {
-      lines.push("Address: " + (order.address || ""));
-    }
-    lines.push("Postcode: " + (order.postcode || ""));
     lines.push("Phone: " + (order.phone || ""));
-    lines.push("Email: " + (order.email || ""));
+    if (order.email) lines.push("Email: " + order.email);
+    if (order.delivery === "delivery" && order.address) lines.push("Address: " + order.address);
+    lines.push("Postcode: " + (order.postcode || ""));
     return lines.join("\n");
-  }
-
-  // Customer-facing version of the same summary, sent to the person who
-  // placed the order once their payment is confirmed. Reuses the order
-  // body but swaps the "message to the kitchen" opening for a proper
-  // thank-you and adds contact details at the end.
-  function confirmationMessage(order) {
-    var business = window.PNF.business;
-    var body = whatsappMessage(order)
-      .split("\n").slice(2).join("\n")
-      .replace("I'd like to order the", "You've ordered the");
-    var first = (order.name || "").split(" ")[0];
-    return [
-      "Hi" + (first ? " " + first : "") + ",",
-      "",
-      "Thanks for your order with Prep 'N' Fresh — your payment has been received and your order is with our kitchen.",
-      "",
-      body,
-      "",
-      "Questions or need to change something? Just reply to this email, or message us on WhatsApp / call " + business.phone + ".",
-      "",
-      "Prep 'N' Fresh",
-      "9 Palmeira Parade, Westcliff-on-Sea, Essex SS0 7RR"
-    ].join("\n");
   }
 
   function whatsappLink(order) {
@@ -247,7 +218,6 @@
     orderPrice: orderPrice,
     dayLabel: dayLabel,
     whatsappMessage: whatsappMessage,
-    confirmationMessage: confirmationMessage,
     whatsappLink: whatsappLink,
     paidWhatsappMessage: paidWhatsappMessage,
     paidWhatsappLink: paidWhatsappLink

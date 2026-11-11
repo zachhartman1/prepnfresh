@@ -53,23 +53,16 @@ module.exports = async (req, res) => {
       return;
     }
 
-    const { packageId, mealCount, orderSummary, name, address, postcode, phone, email, deliveryMethod } = req.body || {};
+    const { packageId, mealCount, orderSummary, name, phone, postcode, deliveryMethod } = req.body || {};
 
     const pkg = PACKAGES[packageId];
     if (!pkg) {
       res.status(400).json({ error: "Unknown package selected." });
       return;
     }
-    if (!name || !postcode || !phone) {
-      res.status(400).json({ error: "Name, postcode and phone number are required." });
-      return;
-    }
-    if (typeof email !== "string" || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim())) {
-      res.status(400).json({ error: "A valid email address is required." });
-      return;
-    }
-    if (deliveryMethod === "delivery" && !address) {
-      res.status(400).json({ error: "Address is required for delivery." });
+    const phoneDigits = typeof phone === "string" ? phone.replace(/[^\d]/g, "") : "";
+    if (!name || !postcode || phoneDigits.length < 10) {
+      res.status(400).json({ error: "Name, mobile number and postcode are required." });
       return;
     }
 
@@ -108,7 +101,7 @@ module.exports = async (req, res) => {
         amount: Math.round(price * 100) // minor units (pence)
       },
       description: truncate(
-        name + " (" + (deliveryMethod === "delivery" ? address + ", " : "") + postcode + ") - " + phone + " - " + packageLabel + " - " + (deliveryMethod === "delivery" ? "Delivery" : "Collection"),
+        name + " " + phoneDigits + " (" + postcode + ") - " + packageLabel + " - " + (deliveryMethod === "delivery" ? "Delivery" : "Collection"),
         128
       ),
       resultURLs: {

@@ -1,6 +1,6 @@
 /* ==========================================================================
-   Order-deadline countdown — there are now TWO weekly cutoffs (Monday 6pm
-   for Tuesday delivery, Thursday 6pm for Friday delivery). This always
+   Order-deadline countdown — there are now TWO weekly cutoffs (Monday 12pm
+   for Tuesday delivery, Thursday 12pm for Friday delivery). This always
    finds whichever cutoff is soonest from the real clock, counts down to
    it, and updates the "Order by ___" label to match — recalculated on
    every load and every tick, never a stored/cached duration. Handles
@@ -11,8 +11,8 @@
   "use strict";
 
   var CUTOFFS = (window.PNF && window.PNF.business.orderCutoffs) || [
-    { weekday: 1, hour: 18, minute: 0, timezone: "Europe/London", cookDay: "Monday", deliversOn: "Tuesday" },
-    { weekday: 4, hour: 18, minute: 0, timezone: "Europe/London", cookDay: "Thursday", deliversOn: "Friday" }
+    { weekday: 1, hour: 12, minute: 0, timezone: "Europe/London", cookDay: "Monday", deliversOn: "Tuesday" },
+    { weekday: 4, hour: 12, minute: 0, timezone: "Europe/London", cookDay: "Thursday", deliversOn: "Friday" }
   ];
 
   function londonPartsNow(tz) {

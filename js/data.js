@@ -120,12 +120,12 @@
     deliveryAreas: ["Westcliff-on-Sea", "Leigh-on-Sea", "Chalkwell", "Southend-on-Sea"],
     deliveryDays: DELIVERY_DAYS,
     additiveFree: "No artificial additives, preservatives or E-numbers \u2014 ever.",
-    // Two cook/delivery cycles a week: cooked the day before, ordered by 6pm
+    // Two cook/delivery cycles a week: cooked the day before, ordered by 12pm
     // the night before that. Monday cook -> Tuesday delivery (order by Monday
-    // 6pm). Thursday cook -> Friday delivery (order by Thursday 6pm).
+    // 12pm). Thursday cook -> Friday delivery (order by Thursday 12pm).
     orderCutoffs: [
-      { weekday: 1, hour: 18, minute: 0, timezone: "Europe/London", cookDay: "Monday", deliversOn: "Tuesday" },
-      { weekday: 4, hour: 18, minute: 0, timezone: "Europe/London", cookDay: "Thursday", deliversOn: "Friday" }
+      { weekday: 1, hour: 12, minute: 0, timezone: "Europe/London", cookDay: "Monday", deliversOn: "Tuesday" },
+      { weekday: 4, hour: 12, minute: 0, timezone: "Europe/London", cookDay: "Thursday", deliversOn: "Friday" }
     ],
     allergensDeclared: ["Celery", "Cereals containing gluten", "Crustaceans", "Eggs", "Fish", "Lupin", "Milk", "Molluscs", "Mustard", "Peanuts", "Sesame", "Soybeans", "Sulphur dioxide & sulphites", "Tree nuts"]
   };

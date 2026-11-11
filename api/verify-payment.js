@@ -32,46 +32,22 @@ function classify(lastEvent) {
 // orderSummary is only present on the first successful check (the client
 // clears its local copy immediately after), so a page refresh naturally
 // can't trigger a second email for the same order.
-// Sender address. Until prepnfresh.co.uk is verified in Resend, only
-// Resend's shared test address works — and it can only deliver to the
-// Resend account owner's own inbox, so customer emails will be rejected
-// (harmlessly) until RESEND_FROM_ADDRESS is set in Vercel to an address on
-// the verified domain, e.g.  Prep N Fresh <orders@prepnfresh.co.uk>
-const FROM_ADDRESS = process.env.RESEND_FROM_ADDRESS || "Prep N Fresh Orders <onboarding@resend.dev>";
-
-async function sendEmail(payload) {
+async function sendOrderEmail(ref, orderSummary) {
   const apiKey = process.env.RESEND_API_KEY;
-  if (!apiKey) return;
-  const r = await fetch("https://api.resend.com/emails", {
+  if (!apiKey || !orderSummary) return;
+
+  await fetch("https://api.resend.com/emails", {
     method: "POST",
     headers: {
       "Authorization": "Bearer " + apiKey,
       "Content-Type": "application/json"
     },
-    body: JSON.stringify(Object.assign({ from: FROM_ADDRESS }, payload))
-  });
-  if (!r.ok) console.error("Resend rejected email:", r.status, await r.text().catch(() => ""));
-}
-
-async function sendOrderEmail(ref, orderSummary) {
-  if (!orderSummary) return;
-  await sendEmail({
-    to: [ORDER_NOTIFICATION_EMAIL],
-    subject: "New order \u2014 " + ref,
-    text: orderSummary
-  });
-}
-
-// Confirmation to the customer. Replies go to the business inbox. The two
-// emails are sent independently so a problem with one never blocks the other.
-async function sendCustomerEmail(ref, customerEmail, customerSummary) {
-  const valid = typeof customerEmail === "string" && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(customerEmail.trim());
-  if (!valid || !customerSummary) return;
-  await sendEmail({
-    to: [customerEmail.trim()],
-    reply_to: ORDER_NOTIFICATION_EMAIL,
-    subject: "Your Prep N Fresh order is confirmed \u2014 " + ref,
-    text: String(customerSummary).slice(0, 5000)
+    body: JSON.stringify({
+      from: "Prep N Fresh Orders <onboarding@resend.dev>",
+      to: [ORDER_NOTIFICATION_EMAIL],
+      subject: "New order \u2014 " + ref,
+      text: orderSummary
+    })
   });
 }
 
@@ -92,8 +68,6 @@ module.exports = async (req, res) => {
 
     const ref = (req.method === "GET" ? req.query.ref : (req.body || {}).ref) || "";
     const orderSummary = (req.method === "POST" && (req.body || {}).orderSummary) || "";
-    const customerEmail = (req.method === "POST" && (req.body || {}).customerEmail) || "";
-    const customerSummary = (req.method === "POST" && (req.body || {}).customerSummary) || "";
     if (!ref) {
       res.status(400).json({ error: "Missing payment reference." });
       return;
@@ -129,7 +103,6 @@ module.exports = async (req, res) => {
 
     if (status === "paid") {
       try { await sendOrderEmail(ref, orderSummary); } catch (emailErr) { console.error("sendOrderEmail failed:", emailErr); }
-      try { await sendCustomerEmail(ref, customerEmail, customerSummary); } catch (emailErr) { console.error("sendCustomerEmail failed:", emailErr); }
     }
 
     res.status(200).json({ status: status, lastEvent: record.lastEvent || null });

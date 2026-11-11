@@ -41,14 +41,6 @@
     if (order && window.PNF_ORDER.whatsappMessage) orderSummary = window.PNF_ORDER.whatsappMessage(order);
   } catch (e) {}
 
-  // Customer-facing confirmation email content and recipient. Only sent by
-  // the server once it has confirmed the payment with Worldpay.
-  var customerEmail = order && order.email ? order.email : "";
-  var customerSummary = "";
-  try {
-    if (order && window.PNF_ORDER.confirmationMessage) customerSummary = window.PNF_ORDER.confirmationMessage(order);
-  } catch (e) {}
-
   // Worldpay records a transaction's final status asynchronously — checking
   // the instant the customer lands back here can catch it before the
   // status has propagated, even though the payment itself already
@@ -63,7 +55,7 @@
     fetch("/api/verify-payment", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ ref: ref, orderSummary: orderSummary, customerEmail: customerEmail, customerSummary: customerSummary })
+      body: JSON.stringify({ ref: ref, orderSummary: orderSummary })
     })
       .then(function (r) { return r.json(); })
       .then(function (data) {
